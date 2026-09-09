@@ -262,33 +262,80 @@ export default function DashboardClient({ userName }: { userName: string }) {
               </div>
             </article>
 
-            <section className="chatWindow" aria-label={`Chat with ${activeStudent.name}`}>
-              {activeStudent.messages.map((message) => (
-                <div className={`message ${message.role}`} key={message.id}>
-                  <span>{message.role === "student" ? activeStudent.name : "GPT Tutor"}</span>
-                  <p>{message.text}</p>
-                </div>
-              ))}
-              {busy ? (
-                <div className="message tutor pending">
-                  <span>GPT Tutor</span>
-                  <p>Reading the student evidence...</p>
-                </div>
-              ) : null}
+            <section className="learnerGrid" aria-label="Current learner summary">
+              <div className="learnerMetric">
+                <span>{activeStudent.confidence}%</span>
+                <p>readiness estimate</p>
+              </div>
+              <div className="learnerMetric">
+                <strong>Next topic</strong>
+                <p>{activeStudent.recommendedNextTopic}</p>
+              </div>
+              <div className="learnerMetric">
+                <strong>Teaching move</strong>
+                <p>{activeStudent.teachingMove}</p>
+              </div>
             </section>
 
-            <form className="composer" onSubmit={submitMessage}>
-              <textarea
-                aria-label="Student message"
-                value={draft}
-                onChange={(event) => setDraft(event.target.value)}
-                placeholder="Ask a question, explain the idea, or try an example..."
-                rows={3}
-              />
-              <button type="submit" disabled={busy || !draft.trim()} aria-label="Send message">
-                {busy ? <Loader2 size={18} aria-hidden /> : <Send size={18} aria-hidden />}
-              </button>
-            </form>
+            <section className="conversationPanel" aria-label={`Chat with ${activeStudent.name}`}>
+              <div className="conversationTitle">
+                <h3>Conversation evidence</h3>
+                <span>{activeStudent.messages.length} turns</span>
+              </div>
+              <div className="chatWindow">
+                {activeStudent.messages.length ? (
+                  activeStudent.messages.map((message) => (
+                    <div className={`message ${message.role}`} key={message.id}>
+                      <span>{message.role === "student" ? activeStudent.name : "GPT Tutor"}</span>
+                      <p>{message.text}</p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="chatEmpty">
+                    <strong>Start with a rough explanation.</strong>
+                    <p>The first message will become the baseline for learner modeling.</p>
+                  </div>
+                )}
+                {busy ? (
+                  <div className="message tutor pending">
+                    <span>GPT Tutor</span>
+                    <p>Reading the student evidence...</p>
+                  </div>
+                ) : null}
+              </div>
+
+              <form className="composer" onSubmit={submitMessage}>
+                <textarea
+                  aria-label="Student message"
+                  value={draft}
+                  onChange={(event) => setDraft(event.target.value)}
+                  placeholder="Ask a question, explain the idea, or try an example..."
+                  rows={3}
+                />
+                <button type="submit" disabled={busy || !draft.trim()} aria-label="Send message">
+                  {busy ? <Loader2 size={18} aria-hidden /> : <Send size={18} aria-hidden />}
+                </button>
+              </form>
+            </section>
+
+            <section className="leftEvidence" aria-label="Selected student evidence">
+              <div>
+                <strong>Strengths</strong>
+                {activeStudent.strengths.slice(0, 3).map((item) => (
+                  <p key={item}>{item}</p>
+                ))}
+              </div>
+              <div>
+                <strong>Watch points</strong>
+                {activeStudent.misconceptions.slice(0, 3).map((item) => (
+                  <p key={item}>{item}</p>
+                ))}
+              </div>
+              <div>
+                <strong>Pattern</strong>
+                <p>{activeStudent.learningPattern}</p>
+              </div>
+            </section>
           </>
         ) : (
           <section className="emptyState">
