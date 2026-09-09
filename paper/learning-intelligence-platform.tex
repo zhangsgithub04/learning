@@ -1,0 +1,299 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{xcolor}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!55!black
+}
+
+\title{\textbf{Conversational Learning Intelligence for Difficult Beginner Subjects:}\\
+A Prototype and Research Conjecture for Personalization, Learning-Behavior Data, and Subject Scaffolding}
+
+\author{Stephen Zhang\\
+Preliminary Concept Paper}
+
+\date{September 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This paper proposes and documents a prototype learning-intelligence platform in which students learn a difficult subject through guided conversation while the system collects structured evidence about their reasoning, misconceptions, confidence, prerequisite gaps, and response to scaffolding. The central conjecture is that conversational learning traces, when transformed into privacy-aware and instructionally meaningful learning-behavior data, can support two complementary forms of personalization: (1) student-level personalization across subjects and (2) subject-level scaffolding across students. The prototype, implemented in Next.js with MongoDB persistence and OpenAI API-based structured analysis, demonstrates the feasibility of converting chat turns into learner models and cohort dashboards. The motivating use case is quantum computing for beginners, where learners often enter with unstable mental models about qubits, superposition, measurement, probability, vectors, and gates. The paper connects the design to learning science, cognitive science, educational psychology, and intelligent tutoring systems, and outlines a research agenda for validating whether such systems can discover useful learning orders, hidden learner types, and adaptive teaching strategies.
+\end{abstract}
+
+\section{Introduction}
+
+Difficult beginner subjects pose a special educational problem. Learners do not merely lack facts; they often lack the conceptual structures needed to interpret explanations. In quantum computing, for example, a novice may hear that a qubit can be in a superposition and infer that it is ``both 0 and 1,'' that quantum computers ``try every answer at once,'' or that measurement is ordinary observation. These statements are not random errors. They are windows into the learner's current model of the subject.
+
+The system described here is motivated by a simple idea: if students converse with a tutor-like application while learning, the application can collect learning behaviors that are richer than quiz scores alone. Student messages can reveal prior knowledge, misconceptions, confidence, analogical reasoning, cognitive load, self-explanation quality, and transfer attempts. When many students use the system, the same data can reveal subject-level learning patterns: which ideas should be introduced first, where beginners become overloaded, which misconceptions persist, and which scaffolds help different groups of students.
+
+This paper frames the prototype as a \emph{learning intelligence platform}. The student-facing side supports guided chat and adaptive prompts. The teacher/researcher-facing side aggregates structured evidence from many sessions. The goal is not to claim that a language model alone can solve education. Rather, the conjecture is that conversational interfaces can become instruments for collecting and interpreting learning-behavior data when they are designed around established constructs from learning science and cognitive science.
+
+\section{Core Conjecture}
+
+The central conjecture is:
+
+\begin{quote}
+Conversational learning traces can be transformed into structured learning-behavior data that supports both personalized tutoring and empirical discovery of effective subject scaffolding for difficult beginner topics.
+\end{quote}
+
+This conjecture has two dimensions.
+
+\textbf{One student across subjects.} A learner may show recurring patterns across different topics: dependence on analogies, difficulty with abstraction, high metacognitive awareness, avoidance of formal notation, strong programming intuition, or sensitivity to cognitive load. If the same student studies probability, linear algebra, and quantum computing, the platform may discover stable learning habits that can inform personalization.
+
+\textbf{One subject across students.} A subject may show repeated friction points across many learners: prerequisite gaps, recurring misconceptions, unhelpful analogies, or topic order dependencies. For quantum computing, the system may discover that one cohort needs probability before amplitude, while another needs vector-space language before gates. This supports subject scaffolding rather than only student tutoring.
+
+\section{Prototype Implementation}
+
+The current prototype is a web application implemented in Next.js with a server-side authentication gate, MongoDB persistence, and OpenAI API-based chat analysis. The page is protected by signup and sign-in. New users must provide a private verification code. Passwords are salted and hashed, and authenticated access is maintained through an HTTP-only session cookie.
+
+The application stores student sessions in MongoDB. Each session contains a student name, subject, chat messages, readiness level, confidence estimate, misconceptions, strengths, learning pattern, recommended next topic, and teaching move. A server route processes each student message. When an OpenAI API key is configured, the route asks the model to produce both a short tutor reply and structured learning evidence. If the key is unavailable, a local heuristic analyzer keeps the prototype functional for demonstration.
+
+The dashboard includes three analysis layers:
+
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Session-level diagnosis:} the current student's estimated readiness, strengths, misconceptions, learning pattern, and next recommended topic.
+  \item \textbf{Student-across-subjects patterns:} recurring strengths, recurring misconceptions, and cross-domain study moves for a single learner across multiple subjects.
+  \item \textbf{Subject-across-students patterns:} common misconceptions, level mix, learning patterns, and topic-ramp candidates for a single subject across many learners.
+\end{enumerate}
+
+The implementation deliberately reserves space for additional analysis types: prerequisite dependency graphs, cognitive load trends, affect and motivation signals, retrieval strength, transfer performance, scaffold fading, peer-teaching readiness, and equity/accessibility signals.
+
+\section{Learning Science and Cognitive Science Foundations}
+
+The prototype draws on several scientific traditions.
+
+\subsection{Prior Knowledge and Misconception Modeling}
+
+Learning depends heavily on what learners already know and what they believe incorrectly. In science education, misconceptions are not merely wrong answers; they are often coherent but inappropriate explanatory models. Quantum topics are especially vulnerable because learners import everyday intuitions into a domain where classical intuitions frequently fail. Recent work in quantum education emphasizes the need to diagnose conceptual understanding and build research-based assessments for quantum computing \cite{meyer2026qccs, mcginness2025inventory, hu2024quantum}.
+
+The platform treats chat messages as open-ended diagnostic evidence. Instead of asking only whether a student selected the correct answer, it asks what model the student appears to be using. For example, a statement such as ``measurement is random because the qubit is both 0 and 1'' may indicate both useful vocabulary and an unstable distinction between superposition, classical uncertainty, and measurement probability.
+
+\subsection{Cognitive Load}
+
+Cognitive load theory argues that working memory limitations matter for instructional design, especially when tasks have high element interactivity \cite{sweller1988load, sweller2010element}. A beginning quantum-computing student may need to coordinate unfamiliar notation, vector representations, probability, linear algebra, and physical interpretation. If all are introduced simultaneously, the learner may fail because the explanation overloads working memory, not because the learner lacks ability.
+
+The prototype can operationalize cognitive load through behavioral signals: repeated confusion, topic switching, very short non-explanatory answers, requests to restart, or inability to complete a multi-step explanation. These signals should not be treated as direct measures of mental load, but they may be useful indicators for adaptive scaffolding.
+
+\subsection{Scaffolding and the Zone of Proximal Development}
+
+The idea of scaffolding is closely related to the learner's zone of proximal development: what the learner cannot yet do independently but can do with support \cite{vygotsky1978mind, wood1976tutoring}. In the proposed system, the tutor should avoid simply giving complete explanations. It should provide graduated hints, examples, contrastive cases, and prompts for self-explanation. As the learner demonstrates more competence, the system should fade support and request more independent reasoning.
+
+For example, a beginner might first compare a hidden classical coin with a qubit state. Later, the same learner might predict measurement probabilities after a Hadamard gate. The platform can record not only the final answer but also the amount and type of support required.
+
+\subsection{Self-Explanation and Metacognition}
+
+Self-explanation research shows that learners benefit from explaining examples and reasoning steps to themselves \cite{chi1989self}. Metacognition also matters: students need to monitor what they understand, where they are uncertain, and whether an explanation actually resolved confusion. A conversational interface is naturally suited to eliciting self-explanations. It can ask students to explain a concept in their own words, compare two cases, state confidence, and revise an answer after feedback.
+
+The prototype stores explanations and confidence-like evidence as part of the learning trace. This can support later analyses of whether students who produce mechanistic explanations progress differently from students who mainly repeat definitions.
+
+\subsection{Retrieval Practice and Desirable Difficulty}
+
+Retrieval practice research suggests that asking learners to retrieve knowledge can improve long-term retention, not merely measure it \cite{roediger2006test}. Related work on desirable difficulties argues that learning activities can feel more difficult in the short term while improving long-term retention and transfer \cite{bjork1994memory}. A learning-intelligence platform should therefore distinguish immediate fluency from durable learning.
+
+In practice, the system can schedule delayed prompts: ``Explain superposition again tomorrow without looking at the previous answer,'' or ``Apply measurement probability to a new circuit.'' These interactions would create data about retrieval strength and transfer, not just initial comprehension.
+
+\subsection{Knowledge Tracing and Intelligent Tutoring Systems}
+
+Intelligent tutoring systems often maintain estimates of learner knowledge over time. Bayesian Knowledge Tracing and later knowledge-tracing models represent a long-standing attempt to infer latent knowledge from observable learner actions \cite{corbett1994knowledge, abdelrahman2022survey}. The present prototype differs in its primary data source: rather than only problem-step correctness, it emphasizes natural-language reasoning and teacher-facing pattern discovery.
+
+The design should not abandon knowledge tracing. Instead, conversational traces can be combined with more traditional evidence: quizzes, simulations, code exercises, delayed retrieval tasks, and transfer problems.
+
+\section{A Learning-Behavior Data Model}
+
+Table~\ref{tab:data-model} summarizes the kinds of learning behaviors that the system can collect and how they may be interpreted.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{p{0.25\linewidth} p{0.34\linewidth} p{0.32\linewidth}}
+\toprule
+\textbf{Observed behavior} & \textbf{Possible construct} & \textbf{Instructional use} \\
+\midrule
+Student explains a concept in own words & Prior knowledge; self-explanation quality & Choose next explanation depth \\
+Student repeats vocabulary without mechanism & Shallow fluency; fragile understanding & Ask for contrastive example \\
+Student expresses uncertainty precisely & Metacognitive awareness & Use guided hint rather than reteaching \\
+Student confuses neighboring concepts & Misconception or overgeneralization & Present two close cases side by side \\
+Student fails after multi-step prompt & Cognitive load or prerequisite gap & Reduce element count; add prerequisite \\
+Student succeeds after delayed prompt & Retrieval strength & Advance or space future review \\
+Student applies concept to new case & Transfer & Move toward independent problem solving \\
+\bottomrule
+\end{tabular}
+\caption{Examples of learning behaviors and their possible instructional interpretation. These are conjectural indicators, not direct psychological measurements.}
+\label{tab:data-model}
+\end{table}
+
+\section{Example: Quantum Computing for Beginners}
+
+Quantum computing is a useful motivating domain because it combines conceptual novelty, mathematical prerequisites, and misleading public metaphors. A beginner may need to understand classical bits, probability, vectors, complex amplitudes, measurement, gates, circuits, entanglement, and algorithmic interference. The best order may differ by learner background.
+
+The platform can begin with conversational probes:
+
+\begin{enumerate}[leftmargin=*]
+  \item What do you think a qubit is?
+  \item How is superposition different from not knowing whether a coin is heads or tails?
+  \item What changes when measurement happens?
+  \item Why might a gate be represented by a matrix?
+  \item What do you think quantum speedup means?
+\end{enumerate}
+
+From responses, the system may infer learner types such as:
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Analogy-first learners:} need intuitive contrast before notation.
+  \item \textbf{Math-ready learners:} can use vectors and matrices but need physical interpretation.
+  \item \textbf{Programming-first learners:} benefit from circuit simulation before formal postulates.
+  \item \textbf{Vocabulary-repeaters:} use terms such as superposition and measurement without mechanistic understanding.
+  \item \textbf{Probability-gap learners:} need sample spaces, conditional probability, or normalization before amplitudes.
+\end{itemize}
+
+At the subject level, the system can aggregate evidence to propose a cohort ramp. For one cohort, the path might be:
+
+\begin{quote}
+Classical bit $\rightarrow$ probability $\rightarrow$ qubit state $\rightarrow$ superposition vs mixture $\rightarrow$ measurement $\rightarrow$ gates.
+\end{quote}
+
+For another cohort, especially students with programming experience, the path might be:
+
+\begin{quote}
+Circuit simulator $\rightarrow$ bit and qubit comparison $\rightarrow$ measurement experiments $\rightarrow$ amplitude notation $\rightarrow$ matrices.
+\end{quote}
+
+\section{Research Questions}
+
+The prototype suggests several empirical research questions:
+
+\begin{enumerate}[leftmargin=*]
+  \item Can conversational traces reliably identify prerequisite gaps and misconceptions compared with human expert coding?
+  \item Do student-across-subject profiles predict which scaffolds help a learner in a new subject?
+  \item Do subject-across-students profiles reveal stable learning orders for difficult beginner topics?
+  \item Does adaptive scaffolding based on conversational evidence improve delayed retrieval and transfer compared with a fixed curriculum?
+  \item Which constructs are most inferable from chat: prior knowledge, misconception type, cognitive load, affect, metacognition, or transfer readiness?
+  \item How should uncertainty be represented so teachers use the dashboard as evidence rather than as a deterministic label?
+\end{enumerate}
+
+\section{Proposed Study Design}
+
+A first validation study could use a mixed-methods design. Participants would be beginner students learning an introductory quantum-computing module. Before instruction, each student would complete a short chat-based diagnostic, a concept inventory or conceptual survey when available, and a confidence rating. During instruction, the platform would record chat turns, prompts, hints, errors, revisions, and time-on-task. After instruction, students would complete immediate and delayed assessments involving explanation, retrieval, and transfer.
+
+Human experts would code a sample of chat traces for misconceptions, prerequisite gaps, and self-explanation quality. These expert codes would be compared with system-generated labels. The key outcome would not be whether the model is ``right'' in a general sense, but whether the labels are reliable enough to inform teaching decisions.
+
+The study should compare at least two instructional conditions:
+
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Fixed ramp:} all students receive the same topic sequence.
+  \item \textbf{Adaptive ramp:} students receive topic order and scaffolds based on conversational learner evidence.
+\end{enumerate}
+
+Primary outcomes should include conceptual understanding, delayed retrieval, transfer to new problems, and student confidence calibration. Secondary outcomes could include time-to-mastery, reduction in repeated misconceptions, and teacher usefulness ratings.
+
+\section{Ethical and Practical Considerations}
+
+Learning-behavior data is sensitive. Student chat traces can reveal confusion, confidence, identity information, emotional state, and educational vulnerability. The system should therefore follow several principles:
+
+\begin{itemize}[leftmargin=*]
+  \item Collect the minimum data needed for learning and research.
+  \item Separate personally identifying information from learning traces where possible.
+  \item Give students and instructors clear notice about what is collected and why.
+  \item Avoid high-stakes decisions based solely on model-generated labels.
+  \item Represent diagnostic claims probabilistically and with evidence.
+  \item Audit performance across different student groups and language backgrounds.
+  \item Allow teachers to inspect the underlying student evidence behind dashboard claims.
+\end{itemize}
+
+The dashboard should be interpreted as decision support, not as an authority. A student should not be reduced to a fixed type. The purpose of a learner model is to improve support, not to classify ability permanently.
+
+\section{Limitations}
+
+The current prototype demonstrates feasibility but does not validate the conjecture. The structured labels are generated by a language model or fallback heuristic and require comparison with expert human coding. The confidence score is not yet a psychometrically validated measure. The MongoDB data model is suitable for prototyping but would need stronger privacy controls, access roles, consent workflows, and audit logs for institutional deployment. The current dashboard aggregates simple counts and averages; more robust discovery of learning orders would require longitudinal data and experimental comparison.
+
+Another limitation is that natural-language chat alone may be insufficient. For subjects such as quantum computing, the system should eventually collect evidence from simulations, circuit-building tasks, quizzes, diagrams, code exercises, and delayed retrieval prompts. The conjecture is strongest when conversation is one evidence stream within a broader learning environment.
+
+\section{Conclusion}
+
+The proposed platform reframes an AI tutor as an instrument for learning intelligence. Students receive guided support, but the deeper value is the structured evidence generated during learning: what students believe, how they explain, when they become overloaded, which scaffolds help, and how topic order should adapt. For difficult beginner subjects such as quantum computing, this creates a plausible path toward personalized learning and empirically grounded subject scaffolding.
+
+The prototype is intentionally preliminary. Its scientific value will depend on careful validation, human expert comparison, privacy-aware data governance, and measurable learning outcomes. Still, the core conjecture is promising: a well-designed conversational learning platform may help educators discover not only how one student learns, but how a subject itself should be taught to different kinds of beginners.
+
+\begin{thebibliography}{99}
+
+\bibitem{abdelrahman2022survey}
+Abdelrahman, G., Wang, Q., \& Nunes, B. P. (2022).
+Knowledge tracing: A survey.
+\emph{ACM Computing Surveys}.
+\url{https://arxiv.org/abs/2201.06953}
+
+\bibitem{bjork1994memory}
+Bjork, R. A. (1994).
+Memory and metamemory considerations in the training of human beings.
+In J. Metcalfe \& A. Shimamura (Eds.), \emph{Metacognition: Knowing about knowing}.
+MIT Press.
+
+\bibitem{chi1989self}
+Chi, M. T. H., Bassok, M., Lewis, M. W., Reimann, P., \& Glaser, R. (1989).
+Self-explanations: How students study and use examples in learning to solve problems.
+\emph{Cognitive Science, 13}(2), 145--182.
+\url{https://doi.org/10.1016/0364-0213(89)90002-5}
+
+\bibitem{corbett1994knowledge}
+Corbett, A. T., \& Anderson, J. R. (1994).
+Knowledge tracing: Modeling the acquisition of procedural knowledge.
+\emph{User Modeling and User-Adapted Interaction, 4}, 253--278.
+
+\bibitem{hu2024quantum}
+Hu, P., Singh, C., \& collaborators. (2024).
+Investigating and improving student understanding of the basics of quantum computing.
+\emph{Physical Review Physics Education Research, 20}, 020108.
+\url{https://doi.org/10.1103/PhysRevPhysEducRes.20.020108}
+
+\bibitem{mcginness2025inventory}
+McGinness, L. (2025).
+The benefits and challenges of a quantum computing concept inventory.
+\url{https://arxiv.org/abs/2512.20836}
+
+\bibitem{meyer2026qccs}
+Meyer, J. C., Griston, M., Passante, G., Pollock, S. J., \& Wilcox, B. R. (2026).
+Measuring student understanding in quantum computing: Development and validation of the Quantum Computing Conceptual Survey.
+\url{https://arxiv.org/abs/2608.14459}
+
+\bibitem{roediger2006test}
+Roediger, H. L., \& Karpicke, J. D. (2006).
+Test-enhanced learning: Taking memory tests improves long-term retention.
+\emph{Psychological Science, 17}(3), 249--255.
+\url{https://pubmed.ncbi.nlm.nih.gov/16507066/}
+
+\bibitem{sweller1988load}
+Sweller, J. (1988).
+Cognitive load during problem solving: Effects on learning.
+\emph{Cognitive Science, 12}(2), 257--285.
+\url{https://doi.org/10.1207/s15516709cog1202_4}
+
+\bibitem{sweller2010element}
+Sweller, J. (2010).
+Element interactivity and intrinsic, extraneous, and germane cognitive load.
+\emph{Educational Psychology Review, 22}, 123--138.
+
+\bibitem{vygotsky1978mind}
+Vygotsky, L. S. (1978).
+\emph{Mind in society: The development of higher psychological processes}.
+Harvard University Press.
+
+\bibitem{wood1976tutoring}
+Wood, D., Bruner, J. S., \& Ross, G. (1976).
+The role of tutoring in problem solving.
+\emph{Journal of Child Psychology and Psychiatry, 17}(2), 89--100.
+
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,760 @@
+:root {
+  --bg: #eef1ef;
+  --ink: #18201d;
+  --muted: #5d6863;
+  --line: #cfd8d1;
+  --panel: #fbfcf8;
+  --panel-strong: #ffffff;
+  --forest: #1f5d4a;
+  --forest-dark: #173a31;
+  --blue: #3267a8;
+  --gold: #c3842f;
+  --rose: #b24b54;
+  --mint: #dcebe2;
+  --sky: #dce8f6;
+  --cream: #f8f4e9;
+  --shadow: 0 20px 55px rgba(28, 45, 39, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background:
+    linear-gradient(90deg, rgba(31, 93, 74, 0.08) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(31, 93, 74, 0.08) 1px, transparent 1px),
+    var(--bg);
+  background-size: 42px 42px;
+  color: var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  align-items: center;
+  border: 0;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+}
+
+button:disabled {
+  cursor: progress;
+  opacity: 0.72;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(50, 103, 168, 0.35);
+  outline-offset: 2px;
+}
+
+.appShell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 420px;
+  min-height: 100vh;
+}
+
+.studentPane {
+  display: grid;
+  grid-template-rows: auto auto auto minmax(360px, 1fr) auto;
+  min-width: 0;
+  padding: 28px;
+}
+
+.topBar,
+.learnerHeader,
+.teacherHeader,
+.patternPanel,
+.profileEvidence,
+.metric {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.topBar {
+  align-items: center;
+  box-shadow: var(--shadow);
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  padding: 22px;
+}
+
+.eyebrow {
+  color: var(--rose);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0;
+  margin: 0 0 6px;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  font-size: 34px;
+  line-height: 1.05;
+  margin-bottom: 0;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 0;
+}
+
+h3 {
+  font-size: 16px;
+  margin-bottom: 0;
+}
+
+.systemStatus {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.systemStatus span {
+  align-items: center;
+  background: var(--panel-strong);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--forest);
+  display: inline-flex;
+  font-size: 13px;
+  font-weight: 800;
+  gap: 7px;
+  min-height: 34px;
+  padding: 0 12px;
+  white-space: nowrap;
+}
+
+.signOutButton {
+  background: #edf2ef;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--forest-dark);
+  font-size: 13px;
+  font-weight: 800;
+  min-height: 34px;
+  padding: 0 12px;
+}
+
+.setupBar {
+  align-items: center;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: minmax(180px, 1fr) minmax(180px, 280px) 48px;
+  padding: 16px 0 0;
+}
+
+.setupBar label {
+  align-items: center;
+  background: var(--panel-strong);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--forest);
+  display: grid;
+  gap: 8px;
+  grid-template-columns: auto minmax(0, 1fr);
+  padding: 8px 12px;
+}
+
+.setupBar input {
+  border: 0;
+  color: var(--ink);
+  min-width: 0;
+  width: 100%;
+}
+
+.setupBar button {
+  aspect-ratio: 1;
+  background: var(--blue);
+  border-radius: 8px;
+  color: white;
+}
+
+.errorBanner,
+.loadingLine,
+.emptyState {
+  align-items: center;
+  background: #fff7e8;
+  border: 1px solid #e5c184;
+  border-radius: 8px;
+  color: #6d4510;
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 12px;
+}
+
+.errorBanner p,
+.emptyState p {
+  margin-bottom: 0;
+}
+
+.loadingLine {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: var(--line);
+  color: var(--muted);
+  margin: 0;
+}
+
+.studentStrip {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 18px 0;
+}
+
+.studentTab,
+.addButton {
+  border-radius: 8px;
+  min-height: 42px;
+}
+
+.studentTab {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  flex: 0 0 auto;
+  gap: 8px;
+  padding: 0 12px;
+}
+
+.studentTab.active {
+  background: var(--forest-dark);
+  color: white;
+}
+
+.studentTab small {
+  color: currentColor;
+  opacity: 0.75;
+}
+
+.addButton {
+  aspect-ratio: 1;
+  background: var(--blue);
+  color: white;
+  flex: 0 0 42px;
+}
+
+.learnerHeader {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding: 18px;
+}
+
+.levelBadge {
+  align-items: center;
+  border-radius: 999px;
+  display: inline-flex;
+  font-size: 14px;
+  font-weight: 800;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 12px;
+  white-space: nowrap;
+}
+
+.levelNew {
+  background: #f7dde0;
+  color: #7f2530;
+}
+
+.levelMid {
+  background: #faebc8;
+  color: #744c13;
+}
+
+.levelReady {
+  background: #d8eadf;
+  color: #174936;
+}
+
+.chatWindow {
+  align-content: start;
+  display: grid;
+  gap: 14px;
+  overflow: auto;
+  padding: 2px 4px 18px;
+}
+
+.message {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  max-width: 74ch;
+  padding: 14px;
+}
+
+.message span {
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 7px;
+  text-transform: uppercase;
+}
+
+.message p {
+  line-height: 1.48;
+  margin-bottom: 0;
+}
+
+.message.student {
+  background: var(--panel-strong);
+  justify-self: end;
+}
+
+.message.tutor {
+  background: var(--mint);
+  justify-self: start;
+}
+
+.message.pending svg,
+.loadingLine svg,
+.composer button svg {
+  flex: 0 0 auto;
+}
+
+.loadingLine svg,
+.composer button:disabled svg {
+  animation: spin 0.9s linear infinite;
+}
+
+.composer {
+  align-items: stretch;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) 52px;
+  padding: 12px;
+}
+
+.composer textarea {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  min-width: 0;
+  padding: 12px;
+  resize: vertical;
+  width: 100%;
+}
+
+.composer button {
+  background: var(--forest);
+  border-radius: 8px;
+  color: white;
+}
+
+.emptyState {
+  align-items: flex-start;
+  color: var(--ink);
+  display: grid;
+}
+
+.insightPane {
+  background: #243530;
+  color: white;
+  display: grid;
+  gap: 16px;
+  padding: 28px;
+}
+
+.teacherHeader {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.16);
+  padding: 20px;
+}
+
+.teacherHeader p:not(.eyebrow) {
+  color: #dce6e1;
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+
+.metricGrid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.metric {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #f8fbf9;
+  display: grid;
+  gap: 6px;
+  padding: 14px;
+}
+
+.metric span {
+  font-size: 26px;
+  font-weight: 900;
+}
+
+.metric small {
+  color: #c7d5cf;
+}
+
+.levelStack {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  display: flex;
+  min-height: 42px;
+  overflow: hidden;
+}
+
+.levelStack div {
+  align-items: center;
+  color: white;
+  display: flex;
+  font-weight: 900;
+  justify-content: center;
+  min-width: 44px;
+}
+
+.newcomers {
+  background: var(--rose);
+}
+
+.middle {
+  background: var(--gold);
+}
+
+.ready {
+  background: var(--blue);
+}
+
+.patternPanel,
+.profileEvidence {
+  background: var(--panel-strong);
+  color: var(--ink);
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+}
+
+.panelTitle {
+  align-items: center;
+  color: var(--forest);
+  display: flex;
+  gap: 8px;
+}
+
+.recommendation,
+.friction,
+.dimensionCard,
+.profileEvidence div {
+  background: #f5f7f1;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.recommendation p,
+.friction p,
+.dimensionCard p,
+.dimensionCard small,
+.profileEvidence p {
+  color: var(--muted);
+  line-height: 1.42;
+  margin-bottom: 0;
+}
+
+.friction {
+  align-items: start;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 38px minmax(0, 1fr);
+}
+
+.friction span {
+  background: var(--cream);
+  border-radius: 6px;
+  color: var(--gold);
+  font-weight: 900;
+  min-height: 30px;
+  padding: 6px;
+  text-align: center;
+}
+
+.profileEvidence {
+  grid-template-columns: 1fr 1fr;
+}
+
+.profileEvidence h3 {
+  grid-column: 1 / -1;
+}
+
+.profileEvidence strong {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.profileEvidence p + p {
+  margin-top: 8px;
+}
+
+.dimensionPanel {
+  align-content: start;
+}
+
+.dimensionCard {
+  display: grid;
+  gap: 9px;
+}
+
+.dimensionTop {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.dimensionTop span {
+  background: var(--sky);
+  border-radius: 999px;
+  color: var(--blue);
+  font-weight: 900;
+  min-height: 28px;
+  padding: 6px 10px;
+}
+
+.miniTags,
+.analysisGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.miniTags span,
+.analysisGrid span {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--forest);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.2;
+  padding: 6px 9px;
+}
+
+.analysisGrid span {
+  border-radius: 6px;
+  color: var(--ink);
+}
+
+.wideEvidence {
+  grid-column: 1 / -1;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.authShell {
+  align-items: stretch;
+  display: grid;
+  grid-template-columns: minmax(320px, 520px) minmax(0, 1fr);
+  min-height: 100vh;
+  padding: 28px;
+}
+
+.authPanel,
+.authAside {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.authPanel {
+  align-content: center;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 20px;
+  padding: 32px;
+}
+
+.authBrand {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+}
+
+.authBrand span {
+  align-items: center;
+  background: var(--forest-dark);
+  border-radius: 8px;
+  color: white;
+  display: inline-flex;
+  height: 46px;
+  justify-content: center;
+  width: 46px;
+}
+
+.authCopy {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.authForm {
+  display: grid;
+  gap: 14px;
+}
+
+.authForm label {
+  color: var(--ink);
+  display: grid;
+  font-weight: 800;
+  gap: 8px;
+}
+
+.authForm input {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  min-height: 44px;
+  padding: 10px 12px;
+}
+
+.authMode {
+  background: #e6ede8;
+  border-radius: 8px;
+  display: grid;
+  gap: 4px;
+  grid-template-columns: 1fr 1fr;
+  padding: 4px;
+}
+
+.authMode button {
+  background: transparent;
+  border-radius: 6px;
+  color: var(--forest-dark);
+  gap: 8px;
+  min-height: 40px;
+}
+
+.authMode button.active {
+  background: white;
+  box-shadow: 0 6px 18px rgba(31, 55, 47, 0.11);
+}
+
+.authSubmit {
+  background: var(--forest);
+  border-radius: 8px;
+  color: white;
+  gap: 8px;
+  min-height: 46px;
+  padding: 0 16px;
+}
+
+.authError {
+  background: #ffe4de;
+  border: 1px solid #e5a092;
+  border-radius: 6px;
+  color: #7a2515;
+  margin-bottom: 0;
+  padding: 12px;
+}
+
+.authAside {
+  align-content: center;
+  background: #243530;
+  color: white;
+  display: grid;
+  gap: 12px;
+  margin-left: 18px;
+  padding: 34px;
+}
+
+.authAside p {
+  color: #dce6e1;
+  line-height: 1.5;
+  margin-bottom: 0;
+  max-width: 520px;
+}
+
+@media (max-width: 1050px) {
+  .appShell {
+    grid-template-columns: 1fr;
+  }
+
+  .insightPane {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .teacherHeader,
+  .profileEvidence {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 720px) {
+  .studentPane,
+  .insightPane {
+    padding: 16px;
+  }
+
+  .topBar,
+  .learnerHeader {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .authShell {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+
+  .authAside {
+    margin-left: 0;
+    margin-top: 16px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  .setupBar,
+  .composer,
+  .metricGrid,
+  .insightPane,
+  .profileEvidence {
+    grid-template-columns: 1fr;
+  }
+
+  .setupBar button {
+    aspect-ratio: auto;
+    min-height: 44px;
+  }
+
+  .message {
+    max-width: 100%;
+  }
+}
