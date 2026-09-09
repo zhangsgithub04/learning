@@ -20,6 +20,8 @@ OPENAI_API_KEY=sk-...
 OPENAI_MODEL=gpt-4.1-mini
 MONGODB_URI=mongodb://127.0.0.1:27017
 MONGODB_DB=beginner_tutor_lab
+SIGNUP_VERIFICATION_CODE=iitg_learningscience
+AUTH_SESSION_SECRET=replace-with-a-long-random-secret
 ```
 
 If `OPENAI_API_KEY` is missing, the chat route uses a local heuristic analyzer so the prototype still works. If `MONGODB_URI` is missing, sessions are stored in memory and reset when the server restarts.
@@ -35,6 +37,30 @@ The dashboard is protected by app-owned signup and sign-in:
 
 For local development, the default verification code is `iitg_learningscience`. Set `AUTH_SESSION_SECRET` to a long random value before using this beyond a local prototype.
 
+## Deploy To Vercel
+
+Use `student-tutor-patterns` as the Vercel project root directory.
+
+Set these Environment Variables in Vercel before using the deployed app:
+
+```bash
+OPENAI_API_KEY=sk-...
+OPENAI_MODEL=gpt-4.1-mini
+MONGODB_URI=mongodb+srv://...
+MONGODB_DB=beginner_tutor_lab
+SIGNUP_VERIFICATION_CODE=iitg_learningscience
+AUTH_SESSION_SECRET=a-long-random-secret
+```
+
+Important: do not use `mongodb://127.0.0.1:27017` on Vercel. That only works on your own computer. For Vercel, use a hosted MongoDB connection string, for example from MongoDB Atlas.
+
+Recommended Vercel settings:
+
+- Framework Preset: Next.js
+- Root Directory: `student-tutor-patterns`
+- Build Command: `npm run build`
+- Install Command: `npm install`
+
 ## Core Routes
 
 - `GET /auth` shows sign in and signup.
@@ -45,5 +71,3 @@ For local development, the default verification code is `iitg_learningscience`. 
 - `POST /api/sessions` creates a new student session.
 - `POST /api/sessions/:id/chat` adds a student message, gets a tutor reply, updates learning evidence, and saves the session.
 - `GET /api/cohort` summarizes cohort-level learning patterns.
-# learningpattern
-# learning
